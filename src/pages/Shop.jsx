@@ -44,7 +44,8 @@ const Shop = () => {
 
     return(
         <>  
-        <div className='w-full relative min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900'            <div className='py-16 sm:py-20 lg:py-24 pb-20 sm:pb-40 max-w-7xl mx-auto px-2 sm:px-4 relative z-10'>
+        <div className='w-full relative min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900'>
+            <div className='py-16 sm:py-20 lg:py-24 pb-20 sm:pb-40 max-w-7xl mx-auto px-2 sm:px-4 relative z-10'>
                 <div className='flex flex-col gap-4 sm:gap-6 lg:gap-8 p-2 sm:p-4'>
                    
                     <div className='flex flex-col bg-slate-800/50 backdrop-blur-sm border border-slate-700 px-3 sm:px-4 py-4 sm:py-6 rounded-xl gap-3 sm:gap-4'>
