@@ -2,13 +2,15 @@ import { Link } from 'react-router-dom'
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
 import { useSelector, useDispatch } from 'react-redux'
 import { addToCart, decreaseQuantity, removeItem } from '../slices/slice'
-import { Plus, Minus, Trash2 } from 'lucide-react'
+import { Plus, Minus, Trash2, Menu, X } from 'lucide-react'
+import { useState } from 'react'
 
 const Navbar = () => {
     const quantity = useSelector(state => state.Cart.quantity)
     const cartItems = useSelector(state => state.Cart.cart)
     const total = useSelector(state => state.Cart.total)
     const dispatch = useDispatch()
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
     const handleIncrease = (item) => {
         dispatch(addToCart(item))
@@ -27,18 +29,20 @@ const Navbar = () => {
     }
 
     return (
-        <nav className="fixed top-0 left-0 right-0 z-50  px-2 sm:px-4">
+        <nav className="fixed top-0 left-0 right-0 z-50 px-2 sm:px-4">
             
-            <div className="max-w-7xl mx-auto px-4 md:px-6  backdrop-blur-xs  bg-slate-900/50 shadow-lg rounded-4xl sm:rounded-4xl mt-2 sm:mt-4">
-                <div className="flex items-center justify-between h-16">
+            <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 backdrop-blur-xs bg-slate-900/95 shadow-lg rounded-2xl sm:rounded-3xl mt-2 sm:mt-4">
+                <div className="flex items-center justify-between h-14 sm:h-16">
                     {/* Logo */}
                     <div className="flex-shrink-0">
-                        <h1 className="text-2xl font-bold text-white">
-                            Neo<span className="text-blue-400">Vault</span>
-                        </h1>
+                        <Link to="/">
+                            <h1 className="text-xl sm:text-2xl font-bold text-white">
+                                Neo<span className="text-blue-400">Vault</span>
+                            </h1>
+                        </Link>
                     </div>
 
-                    {/* Navigation Links */}
+                    {/* Desktop Navigation Links */}
                     <div className="hidden md:block">
                         <div className="flex items-center space-x-8">
                             <Link 
@@ -62,17 +66,18 @@ const Navbar = () => {
                         </div>
                     </div>
 
-                    {/* Cart Popover */}
-                    <div className="flex items-center">
+                    {/* Right side: Cart Popover & Mobile Menu */}
+                    <div className="flex items-center gap-2">
+                        {/* Cart Popover */}
                         <Popover className="relative">
-                            <PopoverButton className="flex items-center text-gray-300 hover:text-white hover:bg-slate-700 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 focus:outline-none ">
-                                <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <PopoverButton className="flex items-center text-gray-300 hover:text-white hover:bg-slate-700 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-medium transition-colors duration-200 focus:outline-none">
+                                <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m0 0h7" />
                                 </svg>
-                                Cart ({quantity})
+                                <span className="hidden xs:inline">Cart </span>({quantity})
                             </PopoverButton>
 
-                            <PopoverPanel className="absolute right-0 top-12 w-96 bg-slate-800 rounded-lg shadow-xl border border-slate-700 overflow-hidden">
+                            <PopoverPanel className="absolute right-0 top-12 w-[calc(100vw-2rem)] max-w-sm sm:w-96 bg-slate-800 rounded-lg shadow-xl border border-slate-700 overflow-hidden">
                                 {cartItems.length === 0 ? (
                                     <div className="text-center py-8 px-4">
                                         <svg className="w-12 h-12 mx-auto text-gray-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -150,17 +155,45 @@ const Navbar = () => {
                                 )}
                             </PopoverPanel>
                         </Popover>
-                    </div>
 
-                    {/* Mobile menu button */}
-                    {/* <div className="md:hidden">
-                        <button className="text-gray-300 hover:text-white hover:bg-slate-700 p-2 rounded-md">
-                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                            </svg>
+                        {/* Mobile Menu Button */}
+                        <button
+                            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                            className="md:hidden text-gray-300 hover:text-white hover:bg-slate-700 p-2 rounded-md transition-colors duration-200"
+                        >
+                            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
                         </button>
-                    </div> */}
+                    </div>
                 </div>
+
+                {/* Mobile Navigation Menu */}
+                {mobileMenuOpen && (
+                    <div className="md:hidden border-t border-slate-700 py-3">
+                        <div className="flex flex-col space-y-2">
+                            <Link
+                                to="/"
+                                onClick={() => setMobileMenuOpen(false)}
+                                className="text-gray-300 hover:text-white hover:bg-slate-700 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                            >
+                                Home
+                            </Link>
+                            <Link
+                                to="/shop"
+                                onClick={() => setMobileMenuOpen(false)}
+                                className="text-gray-300 hover:text-white hover:bg-slate-700 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                            >
+                                Shop
+                            </Link>
+                            <Link
+                                to="/cart"
+                                onClick={() => setMobileMenuOpen(false)}
+                                className="text-gray-300 hover:text-white hover:bg-slate-700 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                            >
+                                Cart
+                            </Link>
+                        </div>
+                    </div>
+                )}
             </div>
         </nav>
     )
